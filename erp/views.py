@@ -1,9 +1,30 @@
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from .serializers import UserSerializer, GroupSerializer
+from django.http import HttpResponse
+from .models import Department, Faculty
+from django.http import Http404
 from django.shortcuts import render
 
-# Create your views here.
-from django.http import HttpResponse
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
 
 
-def index(request):
-    return print(request)
-    #return HttpResponse("Hello, world. You're at ERP powered by python3 django.")
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+def dashboard(request):
+    try:
+        department = Department.objects.order_by('name')
+        context = {'department': department}
+    except Department.DoesNotExist:
+        raise Http404("Department entity does not exist")
+    return render(request, 'dashboard/index.html', context)

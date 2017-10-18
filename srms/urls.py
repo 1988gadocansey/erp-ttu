@@ -17,8 +17,19 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
+
+from django.conf import settings
+admin.site.site_header = settings.ADMIN_SITE_HEADER
 urlpatterns = [
 
     url(r'^erp/', include('erp.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^report_builder/', include('report_builder.urls')),
+
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
