@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles%}
-
+{% load humanize%}
+{% load avatar_tags %}
+{% load account_tags %}
 {% block style %}
  <link rel="stylesheet" href="{% static 'assets/plugins/weather-icons/css/weather-icons.min.css' %}" media="all">
         <!-- metrics graphics (charts) -->
@@ -15,9 +17,10 @@
 
 
 
+ {% avatar user 65 class="img-circle img-responsive" id="user_avatar" %}
+<a href="{% url 'avatar_change' %}">Change your avatar</a>
 
-
-
+{% user_display request.user %}
 
 
 
@@ -27,7 +30,7 @@
                         <div class="md-card-content">
                             <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class=""><i class="sidebar-menu-icon material-icons md-36">access_time</i></span></div>
                             <span class="uk-text-bold uk-text-small">Last Visit</span>
-                            <h5 class="uk-margin-remove"><span class="uk-text-small uk-text-success">  {{ request.user.last_login|date:"D d M Y" }}</span></h5>
+                            <h5 class="uk-margin-remove"><span class="uk-text-small uk-text-success">  {{ request.user.last_login|naturaltime|capfirst }}</span></h5>
                         </div>
                     </div>
                 </div>

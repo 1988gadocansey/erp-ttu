@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
-
+from django.conf.urls.static import static
 from django.conf import settings
 admin.site.site_header = settings.ADMIN_SITE_HEADER
 urlpatterns = [
@@ -25,8 +25,10 @@ urlpatterns = [
     url(r'^erp/', include('erp.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^report_builder/', include('report_builder.urls')),
+    url(r'^avatar/', include('avatar.urls')),
 
-]
+
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

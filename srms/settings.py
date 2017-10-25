@@ -14,8 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DJANGO_MODE = os.getenv('DJANGO_MODE', "production").lower()
-DJANGO_MODE='local'
+DJANGO_MODE = os.getenv('DJANGO_MODE', "local").lower()
+#DJANGO_MODE='local'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -35,6 +35,7 @@ INTERNAL_IPS='127.0.0.1'
 # Application definition
 
 INSTALLED_APPS = [
+'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'report_builder',
      'gunicorn',
+     'import_export',
+      'avatar',
+    "account",
+
+
 ]
 if DJANGO_MODE == 'local':
 	INSTALLED_APPS += (
@@ -60,6 +66,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "account.middleware.LocaleMiddleware",
+    "account.middleware.TimezoneMiddleware",
+    "account.middleware.ExpiredPasswordMiddleware",
+
+
 ]
 
 ROOT_URLCONF = 'srms.urls'
@@ -74,6 +85,9 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                "account.context_processors.account",
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
 
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -83,7 +97,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'srms.wsgi.application'
 ADMIN_SITE_HEADER = "Takoradi Technical University - ERP"
-
+MEDIA_ROOT = '/avatars'
+MEDIA_URL='/media/'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -168,7 +183,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = '/staticfiles'
 
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'srms', 'static'),
@@ -200,3 +215,13 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
 ]
+AVATAR_PROVIDERS=[
+    'avatar.providers.PrimaryAvatarProvider',
+    'avatar.providers.GravatarAvatarProvider',
+    'avatar.providers.DefaultAvatarProvider',
+]
+SITE_ID = 1
+ACCOUNT_EMAIL_UNIQUE = True
+ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
+ACCOUNT_PASSWORD_EXPIRY = 60*60*24*5  # seconds until pw expires, this example shows five days
+ACCOUNT_PASSWORD_USE_HISTORY = True

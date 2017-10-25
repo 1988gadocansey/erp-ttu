@@ -17,4 +17,8 @@ urlpatterns = [
     url(r'^auth/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^dashboard', views.dashboard, name='dashboard'),
+    url(r'^metrics/', include(router.urls)),
+    url(r"^account/signup/$",views.SignupView.as_view(), name="account_signup"),
+url(r"^account/", include("account.urls")),
+
 ]
