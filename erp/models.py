@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-
+from viewflow.models import Process
 @python_2_unicode_compatible  # only if you need to support Python 2
 
 class Faculty(models.Model):
@@ -25,3 +25,6 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
+class HelloWorldProcess(Process):
+    text = models.CharField(max_length=150)
+    approved = models.BooleanField(default=False)

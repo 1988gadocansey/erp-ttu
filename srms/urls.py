@@ -19,19 +19,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views import generic
+from material.frontend import urls as frontend_urls
+
 admin.site.site_header = settings.ADMIN_SITE_HEADER
 urlpatterns = [
 
-    url(r'^erp/', include('erp.urls')),
-    url(r'^admin/', admin.site.urls),
-    url(r'^report_builder/', include('report_builder.urls')),
-    url(r'^avatar/', include('avatar.urls')),
+                  url(r'^erp/', include('erp.urls')),
+                  url(r'^admin/', admin.site.urls),
+                  url(r'^report_builder/', include('report_builder.urls')),
+                  url(r'^avatar/', include('avatar.urls')),
+                  url(r'^$', generic.RedirectView.as_view(url='/workflow/', permanent=False)),
+                  url(r'', include(frontend_urls)),
 
-
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+                      url(r'^__debug__/', include(debug_toolbar.urls)),
+                  ] + urlpatterns

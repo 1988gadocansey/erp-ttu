@@ -50,6 +50,10 @@ INSTALLED_APPS = [
      'import_export',
       'avatar',
     "account",
+'material',
+    'material.frontend',
+    'viewflow',
+    'viewflow.frontend',
 
 
 ]
